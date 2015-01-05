@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+	default-lazy-init="true"> 
+	
+	<bean id="springContextHolder" class="com.drcgw.core.utils.spring.SpringContextHolder" lazy-init="false" /> 
+	
+
+	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 --> 
+	<context:component-scan base-package="com.**.service" />
+	<context:component-scan base-package="com.**.dao" />
+
+	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<!-- Connection Info -->
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- Connection Pooling Info -->
+		<property name="maxIdle" value="${dbcp.maxIdle}" />
+		<property name="maxActive" value="${dbcp.maxActive}" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="timeBetweenEvictionRunsMillis" value="3600000" />
+		<property name="minEvictableIdleTimeMillis" value="3600000" />
+	</bean>
+
+	<!-- 数据源配置,使用应用服务器的数据库连接池 -->
+	<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
+
+	<!-- Hibernate配置 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="namingStrategy">
+			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">true</prop>  
+				<!-- <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop> -->
+				<!-- <prop key="hibernate.cache.provider_configuration_file_resource_path">ehcache/ehcache-hibernate-local.xml</prop> -->
+			</props>
+		</property>
+		<property name="packagesToScan" value="com.**.model" />
+		<property name="lobHandler">
+	      	<ref bean="oracleLobHandler"/>
+	    </property>
+	</bean>
+	
+	<!-- begin Spring Jdbc 操作类注入 -->
+	<bean id="sjdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg>
+			<ref bean="dataSource" />
+		</constructor-arg>
+	</bean>
+	<!-- Spring Jdbc 存储过程 操作类注入 -->
+	<bean id="sjdbcCall" class="org.springframework.jdbc.core.simple.SimpleJdbcCall">
+		<constructor-arg>
+			<ref bean="dataSource" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="jdbcDao" class="com.drcgw.core.orm.spring.JdbcDao">
+		<property name="sjdbcTemplate" ref="sjdbcTemplate" />
+		<property name="sjdbcCall" ref="sjdbcCall" />
+	</bean>
+	
+
+	<bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor" lazy-init="true" autowire="default"/>
+
+	<bean id="oracleLobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler" lazy-init="true" autowire="default" >
+    		<property name="nativeJdbcExtractor" ref="nativeJdbcExtractor"/>
+  	</bean>
+  
+	<!-- 事务管理器配置,单数据源事务 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="globalRollbackOnParticipationFailure" value="false" /> 
+	</bean>
+
+	<!-- 事务通知 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes> 
+			<tx:method name="get*" read-only="true" /> 
+			<tx:method name="find*" read-only="true" />  
+			<tx:method name="is*" read-only="true" />  
+			<tx:method name="*"  propagation="REQUIRED" /> 
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- aop代理设置 -->
+	<aop:config>  
+	    <aop:advisor pointcut="execution(* com..*Service.*(..))" advice-ref="txAdvice"/> 
+	</aop:config> 
+	
+</beans>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="  
+     http://www.springframework.org/schema/beans   
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+     http://www.springframework.org/schema/context   
+     http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+     http://www.springframework.org/schema/util  
+     http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+	default-lazy-init="true">
+
+
+	<!-- 配置connectionFactory -->
+	<bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+		destroy-method="stop">
+		<property name="connectionFactory">
+			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+				<property name="brokerURL">
+					<value>${mq.url}</value>
+				</property>
+				<property name="userName" value="${mq.account}" />
+				<property name="password" value="${mq.password}" />
+			</bean>
+		</property>
+		<property name="maxConnections" value="100"></property>
+	</bean>
+
+	<!-- Spring JMS Template -->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref local="jmsFactory" />
+		</property>
+		<!-- 区别它采用的模式为false是p2p为true是订阅 -->
+		<property name="pubSubDomain" value="false" />
+		<property name="sessionTransacted" value="true"/>
+	</bean>
+
+	<!-- 发送消息的目的地（一个队列） -->
+	<bean id="destination_clms_email" class="org.apache.activemq.command.ActiveMQQueue">
+		<!-- 设置消息队列的名字 -->
+		<constructor-arg index="0" value="Email.queue" />
+		<qualifier value="clms_email"/>
+	</bean>
+
+	<bean id="sendMailService" class="com.drcgw.clms.email.service.impl.SendMailService">
+		<property name="jmsTemplate" ref="jmsTemplate"></property>
+		<property name="destination" ref="destination_clms_email" />
+	</bean>
+
+	<bean id="sendMailListenerContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="concurrentConsumers" value="1" />
+		<property name="connectionFactory" ref="jmsFactory" />
+		<property name="destination" ref="destination_clms_email" />
+		<property name="messageListener" ref="dealMailService" />
+		<property name="pubSubNoLocal" value="false"></property>
+		<!-- <property name="transactionManager" ref="transactionManager" /> -->
+		<property name="sessionTransacted" value="true" />
+	</bean>
+
+	<bean id="dealMailService"
+		class="com.drcgw.clms.email.listener.ReceiveMailMessageListener">
+	</bean>
+
+	<bean id="myConvert" class="com.drcgw.clms.email.common.MyConvert">
+	</bean>
+	
+	<!-- 接口发送 -->
+    <!--发送到中金的队列-->  
+    <!-- 发送表队列 -->
+    <bean id="destination_clms_sendTable" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="${jms.receiveQueue}"/>
+        <qualifier value="clms_sendTable"/>
+    </bean>
+    <!-- 消息监听器 -->
+    <bean id="sendMessageListener" class="com.drcgw.clms.jms.listener.SendMessageListener"/> 
+      
+    <!-- 消息监听容器 -->
+    <bean id="sendMessageContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsFactory" />
+        <property name="concurrentConsumers" value="1" />
+        <property name="sessionTransacted" value="true"/> 
+        <property name="destination" ref="destination_clms_sendTable" />
+        <property name="messageListener" ref="sendMessageListener" />
+    </bean>
+    <!--发送到中金的队列--> 
+    <!-- 接收表队列 -->
+    <bean id="destination_clms_receiveTable" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="${jms.receiveQueue}"/>
+        <qualifier value="clms_receiveTable"/>
+    </bean>
+    <!-- 消息监听器 -->
+    <bean id="receiveMessageListener" class="com.drcgw.clms.jms.listener.ReceiveMessageListener"/> 
+      
+    <!-- 消息监听容器 -->
+    <bean id="receiveMessageContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsFactory" />
+        <property name="concurrentConsumers" value="1" />
+        <property name="sessionTransacted" value="true"/> 
+        <property name="destination" ref="destination_clms_receiveTable" />
+        <property name="messageListener" ref="receiveMessageListener" />
+    </bean>
+</beans>
+	
