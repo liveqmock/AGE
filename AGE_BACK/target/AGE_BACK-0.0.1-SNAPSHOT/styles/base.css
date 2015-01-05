@@ -1,0 +1,59 @@
+.mainBody{margin:7px 7px 7px 7px;overflow-x:hidden;font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#333;text-decoration:none;}
+
+.table {width:100%; font-size:12px;text-align:left;border:1px solid #ccc; border-collapse:collapse; }
+.table td {border:1px solid #ccc ;line-height:22px;   padding:0px 2px 0px 0px; text-indent: 1em;}
+.td2 {font-weight: bold;color: #15428B;border:1px solid #ccc ;line-height:22px;   padding:0px 2px 0px 0px; text-indent: 1em;background-color: #F0F1F3; }
+.linkStyle {margin: 0 0 3 0;border:1px solid #ccc;background-color: #F0F1F3; color: #15428B; line-height: 22px; font-weight: bold;text-indent: 1em;}
+.form_title {font-size:12px;border-style: solid solid none solid; margin: 0; background-color: #F0F1F3; color: #15428B; line-height: 22px; font-weight: bold; text-indent: 1em; border-top-width: 1px; border-right-width: 1px; border-left-width: 1px; border-top-color: #ccc; border-right-color: #ccc; border-left-color: #ccc;}
+.div_info {border-style: solid solid solid solid; margin: 0; background-color: #F0F1F3; color: #15428B; line-height: 22px; font-weight: bold; text-indent: 1em; border-top-width: 1px; border-right-width: 1px; border-left-width: 1px; border-bottom-width: 1px; border-bottom-color: #ccc;border-top-color: #ccc; border-right-color: #ccc; border-left-color: #ccc;}
+
+input[type=text], input[type=password], textarea, select {
+  background-color:#fff;
+  border:1px solid #bbb;
+  padding:2px;
+  font-size:12px;
+}
+
+input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus {
+  border-color:#666;
+}
+
+.datalist {border-style: none none solid none; border-width: 0px 0px 1px 0px; width:100%; font-size:12px; text-align:center; border-collapse:collapse; table-layout:fixed;  border-bottom-color: #ccc; }
+.datalist td { border:1px solid #ccc ;line-height:22px;  min-width:30px; padding:0px 2px 0px 2px;white-space:nowrap;overflow:hidden; text-overflow:ellipsis; } 
+.datalist_title {width:100%; font-size:12px;text-align:center ;border:1px solid #ccc; border-collapse:collapse; line-height:22px;  background-color:#F0F1F3; color:#15428B;font-weight: bold;}
+.datalist_pager {border-width: 0px 1px 1px 1px; border-style: none solid solid solid; margin: 0; background-color: #F0F1F3; color: #15428B; line-height: 22px; font-weight: bold; text-indent: 1em;  border-bottom-color: #ccc; border-right-color: #ccc; border-left-color: #ccc;}
+
+.add {background: url(images/button/add.png) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.delete {background: url(images/button/del.gif) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.close {background: url(images/button/close.png) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.refresh {background: url(images/button/refresh.png) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.edit {background: url(images/button/edit.gif) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.up {background: url(images/button/up.gif) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.down {background: url(images/button/down.gif) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.search {background: url(images/button/search.gif) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.sendMsg {background: url(images/button/sendMsg.gif) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.sendNote {background: url(images/button/sendNote.gif) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.back {background: url(images/button/back.gif) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+.pigeonhole {background: url(images/button/pigeonhole.gif) no-repeat 0 0px;margin:0 5px 0 5px;text-decoration:none; padding-left: 16px; padding-top: 1px;font-size:12px;font-weight: bold;}
+
+
+
+.button {
+	margin: 0 5 0 5;
+	padding: 0px 6px 0 6px;
+	vertical-align: middle;
+	background-color:#F0F1F3;
+	border-width:1;
+	font-family: "Tahoma", "Arial", "sans-serif";
+	font-size: 13px;
+	font-style: normal;
+	color:#15428B;
+	line-height: normal;
+	font-weight: bold;
+	text-decoration: none;
+	border-color: #aecde7;
+	border-style: solid;
+	border-width: 1px;
+	padding-top: 1px;
+	cursor:pointer;  
+}

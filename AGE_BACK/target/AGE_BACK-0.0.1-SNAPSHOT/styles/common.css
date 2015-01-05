@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*普通页面head样式*/
+.headc{width:100%;height:101px;border:solid 1px #a1b8d7;border-bottom:none;
+	background:url(../images/head.gif) repeat-x;color:#18407b;}
+.headc .logo{height:40px;float:left;margin-left:12px;padding-left:50px;
+	background:url(../images/logo.gif) no-repeat;font:bold 36px "黑体";}
+.headc .tips-l{width:15px;height:30px;float:right;display:inline;
+	background:url(../images/tips-l.gif) no-repeat;}
+.headc .tips{height:25px;float:right;padding:2px 0px 2px 0px;display:inline;
+	background-color:#eff6fc;border-bottom:solid 1px #a1b8d7;
+	font-size:14px;font-weight:bold;}
+.user{height:25px;float:right;padding:5px 15px 0px 5px;}
+.headc .tips input{width:100px;height:25px;float:right;padding:5px 10px 0px 30px;
+	border:none;font-size:14px;font-weight:bold;color:#18407b;
+	background-color:transparent;background-repeat:no-repeat;}
+.headc .tips input:hover{cursor:pointer;}
+.headc .tips .exit{background-image:url(../images/exit.gif);}
+.headc .tips .pwd{background-image:url(../images/pwd.gif);}

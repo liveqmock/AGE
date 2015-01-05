@@ -15,7 +15,7 @@
 
 
 	<bean
-		class="com.drcgw.core.utils.spring.SpringPropertyConfigurer">
+		class="com.age.core.utils.spring.SpringPropertyConfigurer">
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="locations">
